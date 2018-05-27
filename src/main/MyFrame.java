@@ -5,17 +5,14 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import common.Screen;
 import panel.GamePanel;
 import panel.StartPanel;
 
-public class MyFrame extends JFrame implements Runnable{
+public class MyFrame extends JFrame implements Runnable,Screen{
 	private Thread main_loop;
 	private int state;
 	private int old_state;
-
-	private final int MENU = 0;
-	private final int GAME = 1;
-
 
 	public MyFrame(String title) {
 		setTitle(title); // タイトル設定
@@ -33,6 +30,9 @@ public class MyFrame extends JFrame implements Runnable{
 		main_loop.start();
 	}
 
+	/*
+	 * パネルの交換(画面切り替え)を行う
+	 * */
 	public void change(JPanel panel) {
 		//ContentPaneにはめ込まれたパネルを削除
 		getContentPane().removeAll();
@@ -42,10 +42,13 @@ public class MyFrame extends JFrame implements Runnable{
 		repaint();//再描画
 	}
 
+	/*
+	 * 画面遷移を監視するループ
+	 * */
 	@Override
 	public void run() {
-
 		while(true) {
+			// 画面状態が変化したらパネルを切り替え
 			if(state != old_state) {
 				if(state == MENU) {
 					change(new StartPanel(this));
@@ -63,6 +66,9 @@ public class MyFrame extends JFrame implements Runnable{
 		}
 	}
 
+	/*
+	 * getter,setterを以下に記述する
+	 * */
 	public void setState(int state) {
 		this.state = state;
 	}
